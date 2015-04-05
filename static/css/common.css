@@ -94,7 +94,7 @@ body {
 }
 
 .banner {
-    background: url(../img/bg.jpeg) no-repeat center center;
+    background: url(../img/bg.jpeg) no-repeat center center rgb(53, 168, 53);
     //background: rgb(255, 133, 46);
     background-size: 100% auto;
     height: 334px;
