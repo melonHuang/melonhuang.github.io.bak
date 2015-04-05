@@ -1,0 +1,38 @@
+.banner {
+    height: 334px;
+}
+
+.article-list {
+}
+
+.article-list li {
+    padding: 54px 0;
+    border-bottom: 1px solid #E5E5E5;
+}
+
+.article-list a {
+    color: black;
+    text-decoration: none;
+    display: block;
+}
+
+.article-list h2 {
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.article-list .date {
+    display: block;
+    color: rgba(56, 56, 56, 0.498039);
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.article-list .excerpt {
+    color: #666665;
+    margin-bottom: 20px;
+}
+
+.article-list .btn {
+    display: none;
+}

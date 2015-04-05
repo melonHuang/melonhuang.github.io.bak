@@ -1,0 +1,13 @@
+.banner {
+    height: 334px;
+}
+
+.post-title {
+    font-weight: bold;
+}
+
+#bd {
+    padding-top: 40px;
+    text-align: center;
+    min-height: 200px;
+}
