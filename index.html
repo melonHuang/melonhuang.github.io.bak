@@ -7,7 +7,7 @@ css: /static/css/index.css
     {% for post in site.posts %}
     <li>
         <a href="{{post.url}}"><h2>{{ post.title }}</h2></a>
-        <span class="date">{{ post.date }}</span>
+        <span class="date">{{ post.date | date_to_string}}</span>
         <div class="excerpt">
         {{ post.excerpt }}
         </div>
