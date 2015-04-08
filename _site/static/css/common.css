@@ -6,7 +6,8 @@ html, body {
 /* typography */
 body {
     color: black;
-    font: 18px/1.6 "Microsoft YaHei" STHeiti Simhei sans-serif;
+    font: 18px/1.6 "Microsoft YaHei", STHeiti, Simhei, "Helvetica Neue", sans-serif;
+    //font: normal 16px/1.8 "Segoe UI Light", "Lucida Grande", "Microsoft Jhenghei", "Microsoft Yahei", Arial, Helvetica, Sans-Serif
     background: white;
 }
 

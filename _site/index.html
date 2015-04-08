@@ -61,6 +61,16 @@
                 <ul class="article-list">
     
     <li>
+        <a href="/javascript/2015/04/08/domcontentloaded-and-stylesheet.html"><h2>翻译-DOMContentLoaded和样式表</h2></a>
+        <span class="date">08 Apr 2015</span>
+        <div class="excerpt">
+        <p>DOMContentLoaded是现代Javascript用途中重要的一部分。在HTML代码被从服务器完全获取，完整的DOM树被创建，并且脚本可以通过DOM API操作DOM树时，DOMContentLoaded事件会被触发。通常，这个时间点被成为&quot;DOM Ready&quot;。与load事件相比，图片，iframe，插件等资源不会阻塞DOMContentLoaded事件。因此，DOMContentLoaded事件对希望尽早给页面绑定Javascript行为的开发者是一个理想的选择。</p>
+
+        </div>
+        <a href="###" class="btn">Continue reading</a>
+    </li>
+    
+    <li>
         <a href="/css/2014/03/27/the-size-of-page-from-pc-to-mobile.html"><h2>网页显示大小的变化，从PC到Mobile-第一部分</h2></a>
         <span class="date">27 Mar 2014</span>
         <div class="excerpt">
@@ -99,9 +109,9 @@
 </div>
 
 <script type="text/javascript" src="http://s2.qhimg.com/static/a9e451ace7e1fd1d/zepto.114.js"></script>
-<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 <script type="text/javascript">
-var duoshuoQuery = {short_name:"melonh"};
+    // 多说
+    var duoshuoQuery = {short_name:"melonh"};
     (function() {
         var ds = document.createElement('script');
         //$('.ds-thread').data('url', location.href);
@@ -111,8 +121,17 @@ var duoshuoQuery = {short_name:"melonh"};
         (document.getElementsByTagName('head')[0] 
          || document.getElementsByTagName('body')[0]).appendChild(ds);
     })();
-    </script>
-<!-- 多说公共JS代码 end -->
+
+    // google analytics
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-61531751-1', 'auto');
+      ga('send', 'pageview');
+
+</script>
 
         </div>
 
