@@ -6,153 +6,123 @@
 </description>
     <link>http://melonhuang.github.io//</link>
     <atom:link href="http://melonhuang.github.io//feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 08 Apr 2015 20:09:12 +0800</pubDate>
-    <lastBuildDate>Wed, 08 Apr 2015 20:09:12 +0800</lastBuildDate>
+    <pubDate>Mon, 20 Feb 2017 22:49:11 +0800</pubDate>
+    <lastBuildDate>Mon, 20 Feb 2017 22:49:11 +0800</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
-        <title>翻译-DOMContentLoaded和样式表</title>
-        <description>&lt;p&gt;DOMContentLoaded是现代Javascript用途中重要的一部分。在HTML代码被从服务器完全获取，完整的DOM树被创建，并且脚本可以通过DOM API操作DOM树时，DOMContentLoaded事件会被触发。通常，这个时间点被成为&amp;quot;DOM Ready&amp;quot;。与load事件相比，图片，iframe，插件等资源不会阻塞DOMContentLoaded事件。因此，DOMContentLoaded事件对希望尽早给页面绑定Javascript行为的开发者是一个理想的选择。&lt;/p&gt;
+        <title> Margin折叠，站在设计者的角度思考</title>
+        <description>&lt;p&gt;大部分前端开发者在实现布局时，都会遇到Margin折叠的问题。CSS2.1标准文档中对Margin折叠的规则进行了标准的描述，但却没有解释这样设计的原因。使得我们想要摸清楚Margin折叠规则变得异常困难，通常需要死记硬背。
+博主本人非常懒，这两天终于下定决心动动瓜脑子研究透彻Margin折叠。本篇文章我试图站在设计者的角度思考Margin折叠的设计思想，帮助自己和大家一起理解Margin折叠，抛开那些死记硬背。&lt;/p&gt;
 
-&lt;p&gt;几乎所有Javascript框架都允许使用者在&amp;quot;on DOM ready&amp;quot;的时候执行他们的脚本。将代码定义在一个私有的function scope中并在&amp;quot;on DOM ready&amp;quot;的时候执行是一个常用的Javascript编程模式。在这样的启动方法中，可借助于选择器引擎查询DOM。例如，获得了DOM的信息，给元素绑定监听事件，修改DOM。正如我所说，这个模式对于DOM脚本编程非常重要。&lt;/p&gt;
+&lt;h2&gt;标准文档对Margin的规定&lt;/h2&gt;
 
-&lt;p&gt;我们在著名的框架中是如何使用DOMContentLoaded事件的呢：&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-javascript&quot; data-lang=&quot;javascript&quot;&gt;&lt;span class=&quot;c1&quot;&gt;//jQuery:&lt;/span&gt;
-&lt;span class=&quot;nx&quot;&gt;jQuery&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;document&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;ready&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{});&lt;/span&gt;
-&lt;span class=&quot;nx&quot;&gt;jQuery&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{});&lt;/span&gt;
+&lt;p&gt;首先，我们看看标准文档对Margin的定义：&lt;/p&gt;
 
-&lt;span class=&quot;c1&quot;&gt;//Prototype:&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;document&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;observe&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;dom:loaded&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{});&lt;/span&gt;
+&lt;blockquote&gt;
+&lt;p&gt;原文：The width of the margin on non-floating block-level elements specifies the minimum distance to the edges of surrounding boxes. Two or more adjoining vertical margins (i.e., with no border, padding or content between them) are collapsed to use the maximum of the margin values. In most cases, after collapsing the vertical margins the result is visually more pleasing and closer to what the designer expects.
+翻译：外边距用来指定非浮动元素与其周围盒子边缘的最小距离。两个或两个以上的相邻的垂直外边距会被折叠并使用它们之间最大的那个外边距值。多数情况下，折叠垂直外边距可以在视觉上显得更美观，也更贴近设计师的预期。&lt;/p&gt;
+&lt;/blockquote&gt;
 
-&lt;span class=&quot;c1&quot;&gt;//Mootools:&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;window&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;addEvent&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;domready&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;IE8和IE8以下的IE浏览器不支持DOMContentLoaded事件，所以这些框架通过使用&lt;a href=&quot;http://javascript.nwbox.com/IEContentLoaded/&quot;&gt;doScroll()的实现方式&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;注意：&lt;/strong&gt;
+如文档所说，margin是非浮动元素与周围盒子边缘的&lt;strong&gt;“最小”&lt;/strong&gt;边距哦。它定义的只是外边距的最小值。&lt;/p&gt;
 
-&lt;h2&gt;DOMContentLoaded和外部样式表&lt;/h2&gt;
+&lt;h3&gt;为什么要有Margin折叠？&lt;/h3&gt;
 
-&lt;p&gt;为了在我的Javascript教程中准确地描述DOMContentLoaded事件的行为，我进行了很多测试。最主要的问题是：外部样式表的加载是否会阻塞DOMContentLoaded事件？这个问题不是最新的，它已经被研究了很多年。&lt;/p&gt;
+&lt;p&gt;只有垂直Margin会发生折叠，而水平Margin则不会。这是为了排版的需要，因为在多数情况下，折叠垂直外边距可以在视觉上显得更美观，也更贴近设计师的预期。&lt;/p&gt;
 
-&lt;p&gt;对于大部分脚本，在样式表加载完成后再执行它们是有道理的，因为这些脚本依赖于应用到DOM上的CSS规则。例如，对于某些脚本的初始化，它们依赖于元素的位置，大小。&lt;/p&gt;
+&lt;h3&gt;Margin折叠规则&lt;/h3&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://developer.mozilla.org/en/docs/Gecko-Specific_DOM_Events#DOMContentLoaded&quot;&gt;Mozilla&lt;/a&gt;中定义到，DOMContentLoaded会在文档被解析，并且里面的脚本被执行后触发。但实际上，DOMContentLoaded有时候会根据脚本的位置和类型，被样式表的加载影响。&lt;/p&gt;
+&lt;p&gt;这里列出标准文档中的Margin折叠规则。快速浏览即可:&lt;/p&gt;
 
-&lt;h2&gt;使用外部脚本在Gecko和Webkit中阻塞DOMContentLoaded&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Two margins are adjoining if and only if:
+1. both belong to in-flow block-level boxes that participate in the same block formatting context
+2. no line boxes, no clearance, no padding and no border separate them (Note that certain zero-height line boxes (see 9.4.2) are ignored for this purpose.)
+3. both belong to vertically-adjacent box edges, i.e. form one of the following pairs:
+    * top margin of a box and top margin of its first in-flow child
+    * bottom margin of box and top margin of its next in-flow following sibling
+    * bottom margin of a last in-flow child and bottom margin of its parent if the parent has &amp;#39;auto&amp;#39; computed height
+    * top and bottom margins of a box that does not establish a new block formatting context and that has zero computed &amp;#39;min-height&amp;#39;, zero or &amp;#39;auto&amp;#39; computed &amp;#39;height&amp;#39;, and no in-flow children&lt;br /&gt;
+Note the above rules imply that:
+1. Margins between a floated box and any other box do not collapse (not even between a float and its in-flow children).
+2. Margins of elements that establish new block formatting contexts (such as floats and elements with &amp;#39;overflow&amp;#39; other than &amp;#39;visible&amp;#39;) do not collapse with their in-flow children.
+3. Margins of absolutely positioned boxes do not collapse (not even with their in-flow children).
+4. Margins of inline-block boxes do not collapse (not even with their in-flow children).
+5. The bottom margin of an in-flow block-level element always collapses with the top margin of its next in-flow block-level sibling, unless that sibling has clearance.
+6. The top margin of an in-flow block element collapses with its first in-flow block-level child&amp;#39;s top margin if the element has no top border, no top padding, and the child has no clearance.
+7. The bottom margin of an in-flow block box with a &amp;#39;height&amp;#39; of &amp;#39;auto&amp;#39; and a &amp;#39;min-height&amp;#39; of zero collapses with its last in-flow block-level child&amp;#39;s bottom margin if the box has no bottom padding and no bottom border and the child&amp;#39;s bottom margin does not collapse with a top margin that has clearance.
+8. A box&amp;#39;s own margins collapse if the &amp;#39;min-height&amp;#39; property is zero, and it has neither top or bottom borders nor top or bottom padding, and it has a &amp;#39;height&amp;#39; of either 0 or &amp;#39;auto&amp;#39;, and it does not contain a line box, and all of its in-flow children&amp;#39;s margins (if any) collapse.&lt;/p&gt;
+
+&lt;p&gt;翻译：
+两个Margin当且只有符合以下规则时，才会发生折叠:
+1. 都属于文档流中的块级盒子，并且属于同一个BFC。
+2. 无line box, clearance, padding, border分离它们
+3. 都属于垂直相邻的盒子边界&lt;br /&gt;
+以上的规则暗示了：
+1. 浮动盒子不会跟其它盒子发生margin折叠（即使是于它的子元素）。
+2. 创建BFC的盒子（如浮动根元素和overflow不为visible的元素）的Margin不会跟它的子元素发生margin折叠。
+3. 绝对定位的盒子不会发生margin折叠（即使与它的子元素）。
+4. display为inline-block的元素不会发生margin折叠（即使与它的子元素）。
+5. 文档流中的会计元素的bottom margin总会和它的下一个文档流中的兄弟元素的top margin折叠，除非这个兄弟元素有clearance
+6. 如果文档流中一个元素没有top border, top padding，且它的子元素没有clearance，那么它的top margin会与它的第一个文档流中的块级子元素的top margin折叠。
+7. 如果文档流中的一个元素的高度为auto，min-height为0，且它没有bottom padding和bottom border，且它的子元素的bottom margin没有与拥有
+8. 当一个盒子的min-height为0，没有top或bottom borders，没有top或bottom padding，height为0或auto，不包含line box，且它的所有文档流中的子孙元素的margin都折叠了，那么它自己的top margin和bottom margin会折叠。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2&gt;Margin设计思想-我的理解&lt;/h2&gt;
 
 &lt;ol&gt;
-&lt;li&gt;&lt;p&gt;测试用例#1：样式表后无脚本
-如果样式表之后没有脚本，那么DOMContentLoaded不会被阻塞。这对所有支持DOMContentLoaded的浏览器都是成立的。&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;测试用例#2：样式表后有外部脚本
-There are several exceptions in which Gecko and Webkit do wait for the stylesheet to load before DOMContentLoaded fires. 。最常见的案例是&lt;code&gt;&amp;lt;link rel=&amp;quot;stylesheet&amp;quot;&amp;gt;&lt;/code&gt;后面跟着一个外部脚本&lt;code&gt;&amp;lt;script src=&amp;quot;...&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;&lt;/code&gt;。这个脚本可以放在文档的任意部分，只要它在&lt;code&gt;&amp;lt;link&amp;gt;&lt;/code&gt;元素后面。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;只有文档流中的块级元素会发生Margin折叠
+文档流外的元素，我们将它们看作是希望有特殊定位的元素，不应该应用文档流中常规文档的排版规则。因此， float不为none，或者position为absolute的元素，不会与兄弟元素发生margin折叠。&lt;/p&gt;
+
+&lt;p&gt;display为inline-block的元素参与渲染上下文是Inline block center。其垂直位置不仅依赖于Margin，还依赖于自己所属的line box。因此也不应发生margin折叠。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;创建BFC的元素，不会与子元素发生margin折叠&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;BFC(Block formatting context)直译为&amp;quot;块级格式化上下文&amp;quot;。它是一个独立的渲染区域，只有Block-level box参与， 它规定了内部的Block-level Box如何布局，并且与这个区域外部毫不相干。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;如标准文档所说，BFC是一个独立的渲染区域，它内部的元素与这个区域外毫不相干，不会相互影响。因此，创建BFC元素ElementA，它的子元素的margin，不应该影响ElementA与其兄弟元素或父元素之间的间距。&lt;/p&gt;
+
+&lt;p&gt;所以，符合以下条件触发BFC的元素，都不会与自己的子元素发生margin折叠：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;float属性不为none&lt;/li&gt;
+&lt;li&gt;position为absolute或fixed&lt;/li&gt;
+&lt;li&gt;display为inline-block, table-cell,&lt;/li&gt;
+&lt;li&gt;table-caption, flex, inline-flex&lt;/li&gt;
+&lt;li&gt;overflow不为visible&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;当元素之间产生间隙时，可能不会发生margin折叠
+元素之间可能由如下原因产生间隙：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;两个元素的margin之间存在border或padding阻挡时，两个元素的margin无法折叠。&lt;/li&gt;
+&lt;li&gt;两个元素相邻，第二个元素由于设置了clear不为none，被浮动的元素挤下去，与第一个元素的margin可能折叠不完全，或者不折叠。&lt;/li&gt;
+&lt;/ol&gt;&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;p&gt;测试用例：
-html:
-&lt;code&gt;html
-&amp;lt;!DOCTYPE html&amp;gt;
-&amp;lt;head&amp;gt;
-&amp;lt;link rel=&amp;quot;stylesheet&amp;quot; href=&amp;quot;http://molily.de/weblog/stylesheet.css&amp;quot;&amp;gt;
-&amp;lt;script src=&amp;quot;http://molily.de/weblog/script.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
-&amp;lt;/head&amp;gt;
-&amp;lt;body&amp;gt;
-&amp;lt;div id=&amp;quot;element&amp;quot;&amp;gt;The element&amp;lt;/div&amp;gt;
-&amp;lt;/body&amp;gt;
-&lt;/code&gt;&lt;/p&gt;
+&lt;h2&gt;防止Margin折叠&lt;/h2&gt;
 
-&lt;p&gt;stylesheet.css:
-```css&lt;/p&gt;
-
-&lt;h1&gt;element { color: red; }&lt;/h1&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;script.js:
-```javascript
-document.addEventListener(&amp;#39;DOMContentLoaded&amp;#39;, function () {
-    // should read #FF0000 or rgb(255, 0, 0)
-    alert(getComputedStyle(document.getElementById(&amp;#39;element&amp;#39;), null).color);
-}, false);
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;为了论证浏览器之间的差异，我强制给HTTP服务器给样式表添加了3秒的延迟，这样文档就可以在样式表被完全接受到前解析完毕。&lt;/p&gt;
-
-&lt;p&gt;上面的代码在Firefox，Safari和Chrome中的行为都如我所预期，但是在Opera中不同。&lt;/p&gt;
-
-&lt;p&gt;在样式表后放置外部脚本是一个常见的做法。当你希望在脚本中读写样式已经生效的DOM时，&lt;a href=&quot;http://api.jquery.com/ready/&quot;&gt;jQuery文档&lt;/a&gt;推荐这种编写元素的顺序。即使这个样式表需要10秒来加载，并且文档在1秒内就被获取并解析完毕，DOMContentLoaded事件也会等到样式表加载并解析完毕后才触发。&lt;/p&gt;
-
-&lt;p&gt;这里涵盖了DOM脚本编程的优缺点。你可以依赖于样式表，但你的脚本必须一直等待，直到样式表加载完毕，才能遍历DOM数并添加监听事件。&lt;/p&gt;
-
-&lt;h2&gt;背景知识：HTML解析&lt;/h2&gt;
-
-&lt;p&gt;这个观测基于更底层的浏览器怪癖-HTML解析和脚本执行算法。&lt;/p&gt;
-
-&lt;h3&gt;Gekco, Webkit和IE中，样式表会阻塞外部脚本的执行&lt;/h3&gt;
-
-&lt;p&gt;在这些浏览器中，&lt;strong&gt;样式表的加载会阻塞外部脚本的执行。&lt;/strong&gt; 测试用例#2的文档head中包含了以下标记：&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;link&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;rel=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;stylesheet&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;http://molily.de/weblog/stylesheet.css&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;script &lt;/span&gt;&lt;span class=&quot;na&quot;&gt;src=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;http://molily.de/weblog/script.js&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&amp;lt;/script&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;当前的Gecko和Webkit版本，和IE8会并行下载样式表和脚本。但是不会执行脚本，直到样式表被加载完毕。并且同时它们不会渲染页面。你可以通过使用Firebug的网络标签，Safari Webjianchaqi 的Resources标签，或者常用的Chrome开发者工具的Timeline标签来验证这一点。
-&lt;img src=&quot;http://molily.de/assets/domcontentloaded/chrome-timeline-my.png&quot; alt=&quot;chrome-timeline&quot;&gt;
-由于DOMContentLoaded会在所有脚本都执行完毕后才触发，因此DOMContentLoaded事件会在样式表被加载并解析后才触发。&lt;/p&gt;
-
-&lt;p&gt;对于IE8也是如此，当然，除了DOMContentLoaded事件。&lt;/p&gt;
-
-&lt;h2&gt;在Opera中，样式表不会阻塞外部脚本的执行&lt;/h2&gt;
-
-&lt;p&gt;但是，这个延迟DOMContentLoaded的方法在Opera中不生效。Opera一加载完脚本后就会开始解析。这导致了增加的渲染，提高了感知的性能，但是会出现从无样式变换到有样式的闪烁。&lt;/p&gt;
-
-&lt;p&gt;为了兼容Opera的差异，jQuery1.2.1到1.2.6在DOMContentLoaded时间后进行了额外的检查。在这些jQuery版本中，它保证DOM ready事件触发时，所有样式表都已经被加载并解析了。jQuery 1.3抛弃了&lt;a href=&quot;http://github.com/jquery/jquery/commit/4c1e12e889f2a70bfa3603fed9d1cabe67d294e0&quot;&gt;这个方案&lt;/a&gt;。（据我所知，Prototype和Mootools完全忽略了这个问题。）&lt;/p&gt;
-
-&lt;h2&gt;在Gecko和IE中，样式表会阻塞内部脚本的执行&lt;/h2&gt;
-
-&lt;p&gt;内部脚本也可以引起不同的浏览器行为：&lt;/p&gt;
-
-&lt;p&gt;测试用例#3
-&lt;code&gt;html
-&amp;lt;link rel=&amp;quot;stylesheet&amp;quot; href=&amp;quot;http://molily.de/weblog/stylesheet.css&amp;quot;&amp;gt;
-&amp;lt;script&amp;gt; Some inline JavaScript code &amp;lt;/script&amp;gt;
-&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;在IE和Gecko中，样式表会阻塞随后内部脚本的执行。因此，DOMContentLoaded事件被延迟了。&lt;/p&gt;
-
-&lt;p&gt;在Webkit和Opera中，内部脚本会马上执行。因此，DOMContentLoaded会在HTML被解析完后立即执行，而不会被样式表阻塞。&lt;/p&gt;
+&lt;p&gt;如上所说：
+1. 只有文档流中的块级元素会发生Margin折叠
+    因此可通过将元素从文档流中去除，或者display设为inline-block的方式，防止其与兄弟节点发生margin折叠。
+2. 创建BFC的元素，不会与子元素发生margin折叠
+    因此可通过触发元素的BFC，来防止它与自己的子元素发生Margin折叠
+3. 当元素之间产生间隙时，可能不会发生margin折叠
+    因此可通过padding,border来制造间隙，以防止margin折叠&lt;/p&gt;
 
 &lt;h2&gt;总结&lt;/h2&gt;
 
-&lt;p&gt;DOMContentLoaded和样式表概述
-| 浏览器引擎 vs. 行为| 当只有stylesheet link前面有脚本时，样式表是否会延迟DOMContentLoaded | 样式表是否会阻塞随后的外部脚本，因此延迟DOMContentLoaded（测试用例#2） | 样式表是否会阻塞随后内部脚本的执行，因此延迟DOMContentLoaded（测试用例#3）|
-| ---- | ---- | ---- | |
-| Presto(Opera)   | no    | no   | no |
-| Webkit(Safari, Chrome) | no | yes | no |
-| Gecko(Firefox)| no | yes| yes |
-| Trident(IE)| no | yes| yes |&lt;/p&gt;
-
-&lt;h2&gt;HTML5来拯救我们吧&lt;/h2&gt;
-
-&lt;p&gt;从前，DOMContentLoaded以Mozilla发明的一个Firefox插件。它未经过Javascript社区来审核这是否是一个通用的实现。这就是为什么Opera和Apple使用了这个事件，实现的却不尽相同。因此DOMContentLoaded有着不同的含义。&lt;/p&gt;
-
-&lt;p&gt;幸运的是，最重要的web标准:HTML5,将会标准化&lt;a href=&quot;http://www.whatwg.org/specs/web-apps/current-work/multipage/the-end.html#the-end&quot;&gt;DOMContentLoaded&lt;/a&gt;事件，和&lt;a href=&quot;http://www.whatwg.org/specs/web-apps/current-work/multipage/parsing.html&quot;&gt;HTML解析过程&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;根据HTML5，DOMContentLoaded是一个纯粹的DOM ready事件，与样式表无关。但是，HTML5解析算法要求浏览器延迟脚本的执行，直到前面所有的样式表都加载并解析完毕。让我们复习一下测试用例#2：&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;link&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;rel=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;stylesheet&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;http://molily.de/weblog/stylesheet.css&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;script &lt;/span&gt;&lt;span class=&quot;na&quot;&gt;src=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;http://molily.de/weblog/script.js&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&amp;lt;/script&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;当HTML5解析器遇到&lt;code&gt;&amp;lt;script&amp;gt;&amp;lt;/script&amp;gt;&lt;/code&gt;标签时，整个解析进程都被暂停了。首先，当是外部脚本时，浏览器会请求script的资源。然后，浏览器等待前面的样式表加载完毕。第三，Javascript引擎解析并执行下载的Javascript代码。最后，解析器继续解析HTML文档。&lt;/p&gt;
-
-&lt;p&gt;假设起码会有一些脚本在样式表后面，它保证了在“Dom ready”的时候所有样式表都加载完毕了。这是因为DOMContentLoaded会在整个文档都解析完毕后触发。&lt;/p&gt;
-
-&lt;p&gt;原来Gecko和IE早在这一点上与HTML5达成一致。但是我们不知道Webkit和Opera是否会切换到HTML5解析规范，也不知道触发HTML5解析器是否需要&lt;code&gt;&amp;lt;!DOCTYPE html&amp;gt;&lt;/code&gt;。&lt;/p&gt;
-
-&lt;p&gt;正如上面所说，解析规则是一个巨大的性能影响因素。如果我们把所有样式表和脚本都放在文档的head，那么解析器会等待这些资源全部加载完毕，再去解析body。为了提供更快的性能，基本的原则就是将样式表放在头部，将脚本放在底部。（见&lt;a href=&quot;http://stevesouders.com/hpws/rules.php&quot;&gt;High Performance Web Sites by Stev Souders&lt;/a&gt;）&lt;/p&gt;
-
-&lt;h2&gt;原文：&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&quot;http://molily.de/domcontentloaded/&quot;&gt;地址&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;这篇文章是我试图站在设计者的角度，对Margin折叠设计思想的理解。避免死记硬背这些规则。大家如果有不同的理解，欢迎讨论。&lt;/p&gt;
 </description>
-        <pubDate>Wed, 08 Apr 2015 00:00:00 +0800</pubDate>
-        <link>http://melonhuang.github.io//javascript/2015/04/08/domcontentloaded-and-stylesheet.html</link>
-        <guid isPermaLink="true">http://melonhuang.github.io//javascript/2015/04/08/domcontentloaded-and-stylesheet.html</guid>
+        <pubDate>Tue, 28 Apr 2015 00:00:00 +0800</pubDate>
+        <link>http://melonhuang.github.io//css/2015/04/28/understand-margin-collapse.html</link>
+        <guid isPermaLink="true">http://melonhuang.github.io//css/2015/04/28/understand-margin-collapse.html</guid>
         
         
-        <category>javascript</category>
+        <category>css</category>
         
       </item>
     
